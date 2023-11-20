@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live Stream</title>
+
+    <link rel="stylesheet" href="index.css" />
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            height: 100vh;
+            /* margin: 20px; */
+            /* padding: 0; */
+            height: 100vh;
+            width: 100vw;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* full-sized  container that fills up the page */
+        div {
+            height: 100%;
+            width: 100%;
+
+            /* example padding, font-size, background, etc */
+            padding: 10px;
+            font-size: 20px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        #video {
+            width: calc(100% - 40px);
+            /* 100% del ancho del cuerpo menos los bordes */
+            /* max-width: 800px; */
+            /* Tamaño máximo del reproductor de video */
+            margin: auto;
+            /* Centra el contenedor de video horizontalmente */
+            display: block;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Live Stream</h2>
+    <div>
+        <video class="border rounded" id="video" controls></video>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <!-- Or if you want a more recent alpha version -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/hls.js@alpha"></script> -->
+    <script>
+        var video = document.getElementById("video");
+        var videoSrc = "/hls/victor.m3u8";
+        if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+        }
+        // hls.js is not supported on platforms that do not have Media Source
+        // Extensions (MSE) enabled.
+        //
+        // When the browser has built-in HLS support (check using `canPlayType`),
+        // we can provide an HLS manifest (i.e. .m3u8 URL) directly to the video
+        // element through the `src` property. This is using the built-in support
+        // of the plain video element, without using hls.js.
+        //
+        // Note: it would be more normal to wait on the 'canplay' event below however
+        // on Safari (where you are most likely to find built-in HLS support) the
+        // video.src URL must be on the user-driven white-list before a 'canplay'
+        // event will be emitted; the last video event that can be reliably
+        // listened-for when the URL is not on the white-list is 'loadedmetadata'.
+        else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+            video.src = videoSrc;
+        }
+    </script>
+</body>
+
+</html>
