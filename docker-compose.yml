@@ -8,6 +8,8 @@ services:
     container_name: rtmp_server
     volumes:
       - ./data:/tmp/hls
+      - ./web:/www
+      - ./web/static:/usr/share/nginx/html
 
   auth:
     build: ./auth
